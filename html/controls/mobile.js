@@ -230,7 +230,7 @@ function penaltyButtonClicked(bObj) {
 			
 		} else {
 			// Not a Jammer, just a blocker. They're simple.
-			enablePenaltyButton(bObj, 18000);
+			enablePenaltyButton(bObj, 60000);
 		}
 	} else {
 		// The clock is running. Remove any left over event handlers..
