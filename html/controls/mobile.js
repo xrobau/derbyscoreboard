@@ -112,61 +112,8 @@ function setupTeamScorePage() {
 
 function updatePenaltyClocks(periodClock) {
 	var dateobj = new Date();
-	$.each(["#Jammer1", "#Blocker1Team1","#Blocker2Team1", "#Blocker3Team1", "#Jammer2", "#Blocker1Team2","#Blocker2Team2", "#Blocker3Team2"], function(i, v) {
-		if ($(v).data('isrunning') == true) {
-			// Update the timeleft with the actual time left.
-			if ($sb("ScoreBoard.Clock(Jam).Running").$sbIsTrue() && $(v).data('paused') == false) {
-				$(v).data('timeleft', periodClock - $(v).data('endtime'));
-			} else {
-				$(v).data('endtime', periodClock - $(v).data('timeleft'));
-			}
-		}
-		
-		// Has it hit zero? Reset it.
-		if ($(v).data('timeleft') < 1) {
-			$(v+"Box").css('background-color', '');
-			$(v).data("isrunning", false);
-			$(v).data("timeleft", 60*1000);
-			$(v).parent().removeClass('ui-btn-up-e').removeClass('ui-btn-hover-e');
-			$(v).parent().attr("data-theme", "b").trigger("mouseout");
-		} else if ($(v).data('timeleft') < 3500) { // Colour, Number, go.
-			$(v+"Box").css('background-color', 'red');
-		} else if ($(v).data('timeleft') < 13500) { // Colour, Number, stand.
-			$(v+"Box").css('background-color', 'yellow');
-		}
-		
-		dateobj.setTime($(v).data('timeleft'));
-		
-		// Pad seconds with leading zero if needed
-		var seconds = dateobj.getSeconds();
-		if (seconds < 10) {
-			seconds = "0"+seconds.toString(16);
-		}
-		$(v+"Time").html(dateobj.getMinutes()+":"+seconds);
-		
-		// Do we need to enable or disable this clock?
-		if ($(v).data('enabled') == true) {
-			// Does it need to be enabled?
-			if ($(v+"Time").is(':hidden')) {
-				// Enable it.
-				$(v).click(function(){ penaltyButtonClicked($(this)) });
-				$(v).parent().removeClass('ui-btn-up-a').removeClass('ui-btn-hover-a');
-				$(v).parent().attr('data-theme', 'b').trigger("mouseout");
-				$(v+"Time").show();
-			}
-		} else { // It needs to be disabled. 
-			if (!$(v+"Time").is(':hidden')) {
-				// Disable it.
-				$(v).unbind('click');
-				$(v).parent().removeClass('ui-btn-up-b').removeClass('ui-btn-hover-b');
-				$(v).parent().attr('data-theme', 'a').trigger("mouseout");
-				$(v+"Time").hide();
-			}
-		}
-		
-	});
-	
-	// Now, check to see if we need to enable or disable any blocker seats
+
+	// Do we need to enable or disable any blocker seats?
 	$.each(['Team1', 'Team2'], function(e, v) {
 		
 		// Logic is:
@@ -203,6 +150,62 @@ function updatePenaltyClocks(periodClock) {
 			}
 		} 
 	});
+	
+	$.each(["#Jammer1", "#Blocker1Team1","#Blocker2Team1", "#Blocker3Team1", "#Jammer2", "#Blocker1Team2","#Blocker2Team2", "#Blocker3Team2"], function(i, v) {
+		if ($(v).data('isrunning') == true) {
+			// Update the timeleft with the actual time left.
+			if ($sb("ScoreBoard.Clock(Jam).Running").$sbIsTrue() && $(v).data('paused') == false) {
+				$(v).data('timeleft', periodClock - $(v).data('endtime'));
+			} else {
+				$(v).data('endtime', periodClock - $(v).data('timeleft'));
+			}
+			// Has it hit zero? Reset it.
+			if ($(v).data('timeleft') < 1) {
+				$(v+"Box").css('background-color', '');
+				$(v).data("isrunning", false);
+				$(v).data("timeleft", 60*1000);
+				$(v).parent().removeClass('ui-btn-up-e').removeClass('ui-btn-hover-e');
+				$(v).parent().attr("data-theme", "b").trigger("mouseout");
+			} else if ($(v).data('timeleft') < 3500) { // Colour, Number, go.
+				$(v+"Box").css('background-color', 'red');
+			} else if ($(v).data('timeleft') < 13500) { // Colour, Number, stand.
+				$(v+"Box").css('background-color', 'yellow');
+			}
+		
+			dateobj.setTime($(v).data('timeleft'));
+		
+			// Pad seconds with leading zero if needed
+			var seconds = dateobj.getSeconds();
+			if (seconds < 10) {
+				seconds = "0"+seconds.toString(16);
+			}
+			$(v+"Time").html(dateobj.getMinutes()+":"+seconds);
+		}
+		
+		// Do we need to enable or disable this clock?
+		if ($(v).data('enabled') == true) {
+			// Does it need to be enabled?
+			if ($(v+"Time").is(':hidden')) {
+				// Enable it.
+				$(v).click(function(){ penaltyButtonClicked($(this)) });
+				$(v).parent().removeClass('ui-btn-up-a').removeClass('ui-btn-hover-a');
+				$(v).parent().attr('data-theme', 'b').trigger("mouseout");
+				$(v+"Time").html("1:00");
+				$(v+"Time").show();
+			}
+		} else { // It needs to be disabled. 
+			if (!$(v+"Time").is(':hidden')) {
+				// Disable it.
+				$(v).unbind('click');
+				$(v).parent().removeClass('ui-btn-up-b').removeClass('ui-btn-hover-b');
+				$(v).parent().attr('data-theme', 'a').trigger("mouseout");
+				$(v+"Time").hide();
+			}
+		}
+		
+	});
+	
+
 	
 	// Only if BOTH Jammers are out of the bin, reset both their sets to zero.
 	if (!$("#Jammer1").data('isrunning') && !$("#Jammer2").data('isrunning')) {
@@ -251,6 +254,7 @@ function penaltyButtonClicked(bObj) {
 			bObj.data('timeleft', bObj.data('timeleft') - 60000); 
 			bObj.data('endtime', bObj.data('endtime') + 60000);
 			$("#PenaltyPopup").popup("close");
+			bObj.data('set', parseInt(bObj.data('set') - 1));
 		});	
 		// Set the details in the popup window
 		$("#timeremaining").data('timeleft', bObj.data('timeleft'));
