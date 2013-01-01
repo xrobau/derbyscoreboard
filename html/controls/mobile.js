@@ -77,9 +77,7 @@ function setupPenaltyTimePage() {
   $("#Blocker1Team2").data('enabled', true);
   $("#Blocker2Team2").data('enabled', true);
   $sb("ScoreBoard.Clock(Period).Time").$sbBindAndRun("content", function(e, v) { updatePenaltyClocks(parseInt(v)) });
-  
-  
-  updatePenaltyClocks(0);
+  updatePenaltyClocks(1800000);
  
 }
 
@@ -187,6 +185,7 @@ function updatePenaltyClocks(periodClock) {
 			// Does it need to be enabled?
 			if ($(v+"Time").is(':hidden')) {
 				// Enable it.
+				$(v).unbind('click');
 				$(v).click(function(){ penaltyButtonClicked($(this)) });
 				$(v).parent().removeClass('ui-btn-up-a').removeClass('ui-btn-hover-a');
 				$(v).parent().attr('data-theme', 'b').trigger("mouseout");
@@ -218,6 +217,7 @@ function penaltyButtonClicked(bObj) {
 
 	// navigator.vibrate(500);  // This doesn't work on ANYTHING yet. Sigh.
 	var isrunning = bObj.data('isrunning');
+	console.log('isrunning is '+isrunning);
 	if (isrunning == false) {
 		console.log(bObj.attr('id'))
 		if (bObj.attr('id') == 'Jammer1' || bObj.attr('id') == 'Jammer2') {
@@ -334,15 +334,15 @@ function jammerin(o, t) {
 			$("#JammerPopup").popup('close');
 			return;
 		} else if ($(other).data('timeleft') > 60000 && t == 2) {
-			console.log("herp derp");
-			// OK, Crap. Someone's come in with two minutes and the OTHER jammer has more than one.
+			
+			// Someone's come in with two minutes and the OTHER jammer has more than one.
 			// This seems a bit complex, but it's not. 
 			// Firstly, we're cancelling out the minute on both. (7.2.10) Bam, first problem solved.
 			enablePenaltyButton($(other), 60000 - $(other).data('timeleft'));
 			t == 1;
 			// Now, it's just a matter making sure they're on the same set, and sending the first jammer out.
 			// This'll happen automatically in the next bit.
-		}
+		} 
 
 		// If the jammers are on the same set, then the other can be released, and this one sits for the same time the other
 		// one was in there for (plus, possibly, an extra minute)
