@@ -244,17 +244,32 @@ function penaltyButtonClicked(bObj) {
 		$("#BtnCancel").click(function() { cancelPenalty(bObj) });
 		$("#BtnClock").click(function() { togglePausePenalty(bObj) });
 		$("#BtnAdd1").click(function() { 
-			bObj.data('timeleft', bObj.data('timeleft') + 60000); 
-			bObj.data('endtime', bObj.data('endtime') - 60000);
-			$("#"+bObj.attr('id')+"Box").css('background-color', '');
-			$("#PenaltyPopup").popup("close");
-			bObj.data('set', parseInt(bObj.data('set') + 1));
+			// Now, before we just wildly give them an extra minute, does the OTHER jammer have more than 60 secs? We don't care
+			// about sets here, the rules just say 'more than 60 seconds'.
+			var j = bObj.attr('id'); // Which jammer is this
+			var other = (j == 'Jammer1')?'#Jammer2':"#Jammer1"; // This is the other jammer.
+			if ($(other).data('timeleft') >= 60000 && $(other).data('isrunning')) {
+				bObj.data('timeleft', bObj.data('timeleft') - 60000); 
+				bObj.data('endtime', bObj.data('endtime') + 60000);
+				// Decrease the other jammers set
+				$(other).data('set', $(other).data('set') - 1);
+			} else { // Other jammer has LESS than 60 secs.
+				// Firstly, increase the set
+				bObj.data('set', parseInt(bObj.data('set') + 1));
+				console.log('Increasing set in btnadd1 - is now '+parseInt(bObj.data('set'));
+			
+				bObj.data('timeleft', bObj.data('timeleft') + 60000); 
+				bObj.data('endtime', bObj.data('endtime') - 60000);
+				$("#"+bObj.attr('id')+"Box").css('background-color', '');
+				$("#PenaltyPopup").popup("close");
+			}
 		});
 		$("#BtnDel1").click(function() { 
 			bObj.data('timeleft', bObj.data('timeleft') - 60000); 
 			bObj.data('endtime', bObj.data('endtime') + 60000);
 			$("#PenaltyPopup").popup("close");
 			bObj.data('set', parseInt(bObj.data('set') - 1));
+			console.log('Decreasing set in btndel1 - is now '+parseInt(bObj.data('set'))
 		});	
 		// Set the details in the popup window
 		$("#timeremaining").data('timeleft', bObj.data('timeleft'));
@@ -266,6 +281,7 @@ function penaltyButtonClicked(bObj) {
 function cancelPenalty(o) {
 	o.data("isrunning", false);
 	o.data("timeleft", 60*1000);
+	$("#"+o.attr('id')+"Time").html("1:00");
 	o.parent().removeClass('ui-btn-up-e').removeClass('ui-btn-hover-e');
 	o.parent().attr("data-theme", "b").trigger("mouseout"); 
 	$("#PenaltyPopup").popup("close");
@@ -303,7 +319,6 @@ function jammerin(o, t) {
 	
 	// Lets start with the easy one.
 	// Jammer comes in, there's no other jammer.
-	
 	if ( !$(other).data('isrunning') ) {
 		console.log('NOTrunning - this is '+o.data('set')+', other is '+$(other).data('set'));
 		if (t == 2) {
@@ -329,6 +344,8 @@ function jammerin(o, t) {
 			console.log('More than 1 min');
 			$(other).data('timeleft', $(other).data('timeleft') - 60000);
 			$(other).data('endtime', $(other).data('endtime') + 60000);
+			// This is now the next set.
+			$(other).data('set', parseInt($(other).data('set') + 1));
 			// FIXME - add a message saying release this jammer.
 			enablePenaltyButton(o, 500);
 			$("#JammerPopup").popup('close');
@@ -340,6 +357,8 @@ function jammerin(o, t) {
 			// Firstly, we're cancelling out the minute on both. (7.2.10) Bam, first problem solved.
 			enablePenaltyButton($(other), 60000 - $(other).data('timeleft'));
 			t == 1;
+			// This is now the next set.
+			$(other).data('set', parseInt($(other).data('set') + 1));
 			// Now, it's just a matter making sure they're on the same set, and sending the first jammer out.
 			// This'll happen automatically in the next bit.
 		} 
