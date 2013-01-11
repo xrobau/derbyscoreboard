@@ -53,6 +53,7 @@ function setupPeriodTimePage() {
 }
 
 function setupPenaltyTimePage() {
+
   var ptime = $sb("ScoreBoard.Clock(Period).Time");
   var jtime = $sb("ScoreBoard.Clock(Jam).Time");
     
@@ -107,7 +108,7 @@ function setupTeamScorePage() {
     });
   });
 }
-
+ 
 function updatePenaltyClocks(periodClock) {
 	var dateobj = new Date();
 
@@ -237,7 +238,7 @@ function penaltyButtonClicked(bObj) {
 		}
 	} else {
 		// The clock is running. Remove any left over event handlers..
-		$.each(["#BtnCancel", "#BtnClock", "#BtnAdd1", "#BtnDel1"], function (v, e) {
+		 $.each(["#BtnCancel", "#BtnClock", "#BtnAdd1", "#BtnDel1"], function (v, e) {
 			$(e).unbind("click");
 		});
 		// Add some new ones
@@ -256,25 +257,26 @@ function penaltyButtonClicked(bObj) {
 			} else { // Other jammer has LESS than 60 secs.
 				// Firstly, increase the set
 				bObj.data('set', parseInt(bObj.data('set') + 1));
-				console.log('Increasing set in btnadd1 - is now '+parseInt(bObj.data('set'));
+				console.log('Increasing set in btnadd1 - is now '+parseInt(bObj.data('set')));
 			
 				bObj.data('timeleft', bObj.data('timeleft') + 60000); 
 				bObj.data('endtime', bObj.data('endtime') - 60000);
 				$("#"+bObj.attr('id')+"Box").css('background-color', '');
-				$("#PenaltyPopup").popup("close");
+				$("#PenaltyPopup").popup("close"); 
 			}
-		});
+		}); 
 		$("#BtnDel1").click(function() { 
 			bObj.data('timeleft', bObj.data('timeleft') - 60000); 
 			bObj.data('endtime', bObj.data('endtime') + 60000);
 			$("#PenaltyPopup").popup("close");
 			bObj.data('set', parseInt(bObj.data('set') - 1));
-			console.log('Decreasing set in btndel1 - is now '+parseInt(bObj.data('set'))
+			console.log('Decreasing set in btndel1 - is now '+parseInt(bObj.data('set')));
 		});	
 		// Set the details in the popup window
 		$("#timeremaining").data('timeleft', bObj.data('timeleft'));
 		$("#timeremaining").html(parseInt(bObj.data('timeleft')/1000));
 		$("#PenaltyPopup").popup("open");
+	 
 	} 
 }
 
