@@ -1,6 +1,7 @@
 
 /**
  * Copyright (C) 2008-2012 Mr Temper <MrTemper@CarolinaRollergirls.com>
+ * Penalty Timing (C) 2013 Rob Thomas (The G33k) <xrobau@gmail.com>
  *
  * This file is part of the Carolina Rollergirls (CRG) ScoreBoard.
  * The CRG ScoreBoard is licensed under either the GNU General Public
@@ -319,25 +320,21 @@ function jammerin(o, t) {
 	var j = o.attr('id'); // Which jammer is this
 	var other = (j == 'Jammer1')?'#Jammer2':"#Jammer1"; // This is the other jammer.
 	
+	// Sets! We care about sets. 
+	o.data('set', parseInt(o.data('set') + t));
+	
 	// Lets start with the easy one.
 	// Jammer comes in, there's no other jammer.
 	if ( !$(other).data('isrunning') ) {
 		console.log('NOTrunning - this is '+o.data('set')+', other is '+$(other).data('set'));
-		if (t == 2) {
-			enablePenaltyButton(o, 120000);
-			$("#JammerPopup").popup('close');
-		} else {
-			enablePenaltyButton(o, 60000);
-			$("#JammerPopup").popup('close');
-		}
-		o.data('set', parseInt(o.data('set') + 1));
+		enablePenaltyButton(o, t*60000);
+		$("#JammerPopup").popup('close');
 		return;
 	}
 	
 	// Jammer comes in, there's another jammer already there 
 	if ($(other).data('isrunning')) {
-		
-		o.data('set', parseInt(o.data('set') + 1));
+			
 		console.log('isrunning - this is '+o.data('set')+', other is '+$(other).data('set'));
 		
 		// Does the OTHER jammer have more than 1 minute, and this one only had 1?
