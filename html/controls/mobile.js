@@ -336,28 +336,31 @@ function jammerin(o, t) {
 	if ($(other).data('isrunning')) {
 			
 		console.log('isrunning - this is '+o.data('set')+', other is '+$(other).data('set'));
-		
-		// Does the OTHER jammer have more than 1 minute, and this one only had 1?
-		// If so, release this jammer, and subtract 1 minute from the other
-		if ($(other).data('timeleft') > 60000 && t == 1) {
-			console.log('More than 1 min');
+				
+		if ($(other).data('timeleft') > 60000) {
+			// 7.3.10 explicity says that if the other jammer has more than 1min, release the arriving jammer (eg, this one)
+			// immediately. She may still stay sitting if this was a two minute, but still..
 			$(other).data('timeleft', $(other).data('timeleft') - 60000);
 			$(other).data('endtime', $(other).data('endtime') + 60000);
-			// This is now the next set.
-			$(other).data('set', parseInt($(other).data('set') + 1));
-			// FIXME - add a message saying release this jammer.
-			enablePenaltyButton(o, 500);
-			$("#JammerPopup").popup('close');
-			return;
-		} else if ($(other).data('timeleft') > 60000 && t == 2) {
+			// Remove a set from the other jammer, as if it never happened!
+			$(other).data('set', parseInt($(other).data('set') - 1));
+			if (t == 1) {
+				// You may now go.
+				// FIXME - add a message saying release this jammer.
+				enablePenaltyButton(o, 500);
+				o.data('set', parseInt(o.data('set') - 1));
+				$("#JammerPopup").popup('close');
+				return;
+			}
+			// else 
 			
 			// Someone's come in with two minutes and the OTHER jammer has more than one.
 			// This seems a bit complex, but it's not. 
 			// Firstly, we're cancelling out the minute on both. (7.2.10) Bam, first problem solved.
 			enablePenaltyButton($(other), 60000 - $(other).data('timeleft'));
 			t == 1;
-			// This is now the next set.
-			$(other).data('set', parseInt($(other).data('set') + 1));
+			// Remove the set from the other.
+			$(other).data('set', parseInt($(other).data('set') - 1));
 			// Now, it's just a matter making sure they're on the same set, and sending the first jammer out.
 			// This'll happen automatically in the next bit.
 		} 
