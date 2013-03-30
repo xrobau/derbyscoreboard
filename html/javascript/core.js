@@ -467,7 +467,7 @@ _crgScoreBoard = {
         if (!(tmpV === undefined && isTrue(convertOptions.onlyMatch)))
           v = tmpV;
       }
-      if (e.is("a,span")) {
+      if (e.is("a,span,h1,h2")) {
         if (e.html() != v)
           e.html(v);
       } else if (e.is("img")) {
