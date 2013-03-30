@@ -17,8 +17,12 @@
 
 /* JamControlPage */
   #JamControlPage p.Clocks { text-align: center; }
-
   #JamControlPage p.Clocks>span { padding: 0.5em 0.5em; margin: auto 0.5em; }
+  #JamControlPage table { width: 100% }
+  #JamControlPage td {width: 50%; }
+  #period { font-size: 150%; width: 95%; text-align: center}
+  #periodno {font-size: 200% }
+  #periodtime { font-size: 500%; text-align: center }
 /* END JamControlPage */
 
 /* PeriodTimePage */
