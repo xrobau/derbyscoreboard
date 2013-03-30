@@ -29,11 +29,35 @@ function setupJamControlPage() {
     });
   });
   
+  // Update Period Clock
   var ptime = $sb("ScoreBoard.Clock(Period).Time");
   ptime.$sbElement("#periodtime a", { sbelement: {
 	    convert: _timeConversions.msToMinSec
   }});
+  
+  // Update Period number
+  $sb("ScoreBoard.Clock(Period).Number").$sbElement("#periodno");
+  
+  // Display text and info for what's happening. 
 
+  // Lineup Clock
+  $sb("ScoreBoard.Clock(Lineup).Running").$sbBindAndRun("content", function(e, v) {
+	  $("#displaytext").html("Lineup Clock");
+	  $("#periodtime").html()
+  });
+  
+  // Jam Clock
+  $sb("ScoreBoard.Clock(Jam).Running").$sbBindAndRun("content", function(e, v) {
+	  $("#displaytext").html("Jam Clock");
+  });
+  
+  // Timeout Clock
+  $sb("ScoreBoard.Clock(Timeout).Running").$sbBindAndRun("content", function(e, v) {
+	  $("#displaytext").html("Timeout Clock");
+  });
+
+  
+  // 
   
 }
 
