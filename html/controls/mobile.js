@@ -22,6 +22,8 @@ function setupJamControlPage() {
   $sb("ScoreBoard.StartJam").$sbControl("#JamControlPage button.StartJam").val(true);
   $sb("ScoreBoard.StopJam").$sbControl("#JamControlPage button.StopJam").val(true);
   $sb("ScoreBoard.Timeout").$sbControl("#JamControlPage button.Timeout").val(true);
+  $sb("ScoreBoard.Team(1).Timeout").$sbControl("#team1timeout").val(true);
+  $sb("ScoreBoard.Team(2).Timeout").$sbControl("#team2timeout").val(true);
 
   $.each( [ "Period", "Jam", "Timeout" ], function(i, clock) {
     $sb("ScoreBoard.Clock("+clock+").Running").$sbBindAndRun("content", function(event, value) {
@@ -57,7 +59,7 @@ function setupJamControlPage() {
   // Lineup Clock
   $sb("ScoreBoard.Clock(Lineup).Running").$sbBindAndRun("content", function(e, v) {
 	  if (v == "true") {
-		  $.each([ '#loadingdiv', '#jamdiv', '#timeoutdiv'], function(i, divname) {
+		  $.each([ '#jamdiv', '#timeoutdiv'], function(i, divname) {
 			  $(divname).fadeOut('fast');
 		  });
 		  $("#lineupdiv").fadeIn('fast');
@@ -67,7 +69,7 @@ function setupJamControlPage() {
   // Jam Clock
   $sb("ScoreBoard.Clock(Jam).Running").$sbBindAndRun("content", function(e, v) {
 	  if (v == "true") {
-		  $.each([ '#loadingdiv', '#lineupdiv', '#timeoutdiv'], function(i, divname) {
+		  $.each([ '#lineupdiv', '#timeoutdiv'], function(i, divname) {
 			  $(divname).fadeOut('fast');
 		  });
 		  $("#jamdiv").fadeIn('fast');
@@ -77,7 +79,7 @@ function setupJamControlPage() {
   // Timeout Clock
   $sb("ScoreBoard.Clock(Timeout).Running").$sbBindAndRun("content", function(e, v) {
 	  if (v == "true") {
-		  $.each([ '#loadingdiv', '#jamdiv', '#lineupdiv'], function(i, divname) {
+		  $.each([ '#jamdiv', '#lineupdiv'], function(i, divname) {
 			  $(divname).fadeOut('fast');
 		  });
 		  $("#timeoutdiv").fadeIn('fast');
