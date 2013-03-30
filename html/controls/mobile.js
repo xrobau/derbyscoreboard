@@ -28,6 +28,13 @@ function setupJamControlPage() {
       $("#JamControlPage span.ClockBubble."+clock).toggleClass("Running", isTrue(value));
     });
   });
+  
+  var ptime = $sb("ScoreBoard.Clock(Period).Time");
+  ptime.$sbElement("#periodtime a", { sbelement: {
+	    convert: _timeConversions.msToMinSec
+  }});
+
+  
 }
 
 function setupPeriodTimePage() {

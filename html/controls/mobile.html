@@ -101,12 +101,26 @@
   </div>
 
   <div data-role="content">
-    <p><button class="StartJam">Start Jam</button></p>
-    <p><hr/></p>
-    <p><button class="StopJam">Stop Jam</button></p>
-    <p><hr/></p>
-    <p><button class="Timeout">Timeout</button></p>
-    <p><hr/></p>
+        <table>
+        	<tr><td><div class="ui-block-a" id="period">Period<br/><span id="periodno">{x}</span></div></td>
+        	<td><div class="ui-block-b" id="periodtime"><a>0:00</a></div></td>
+        </table>
+        <h2>Jam Time/Next Jam</h2>
+        <h1>1:59</h1>
+        <div class="ui-grid-a">
+        	<div class="ui-block-a">
+				<button class="StartJam" data-role="button" data-icon="check" data-iconpos="right">Start Jam</button>
+            </div>
+            <div class="ui-block-b">
+                <button class="StopJam" data-role="button" data-icon="plus" data-iconpos="left">Stop Jam</a>
+            </div>
+        </div>
+        <button class="Timeout" data-role="button">Timeout</button>
+        <div class="ui-grid-b">
+        	<div class="ui-block-a"><a data-role="button">Team 1</a></div>
+        	<div class="ui-block-b"><a data-role="button">Official</a></div>
+        	<div class="ui-block-c"><a data-role="button">Team 2</a></div>
+        </div>
     <p class="Clocks">
       <span class="ClockBubble Period">Period</span>
       <span class="ClockBubble Jam">Jam</span>
