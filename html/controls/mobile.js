@@ -29,31 +29,59 @@ function setupJamControlPage() {
     });
   });
   
-  // Update Period Clock
-  var ptime = $sb("ScoreBoard.Clock(Period).Time");
-  ptime.$sbElement("#periodtime a", { sbelement: {
+  // Period Clock
+  $sb("ScoreBoard.Clock(Period).Time").$sbElement("#periodtime a", { sbelement: {
 	    convert: _timeConversions.msToMinSec
   }});
+  
+  // Lineup Clock
+  $sb("Scoreboard.Clock(Lineup).Time").$sbElement("#lineupdiv h1", { sbelement: {
+	    convert: _timeConversions.msToMinSec
+  }});
+
+  // Jam Clock
+  $sb("Scoreboard.Clock(Jam).Time").$sbElement("#jamdiv h1", { sbelement: {
+	    convert: _timeConversions.msToMinSec
+  }});
+
+  // Timeout Clock
+  $sb("Scoreboard.Clock(Timeout).Time").$sbElement("#timeoutdiv h1", { sbelement: {
+	    convert: _timeConversions.msToMinSec
+  }});
+
   
   // Update Period number
   $sb("ScoreBoard.Clock(Period).Number").$sbElement("#periodno");
   
   // Display text and info for what's happening. 
-
   // Lineup Clock
   $sb("ScoreBoard.Clock(Lineup).Running").$sbBindAndRun("content", function(e, v) {
-	  $("#displaytext").html("Lineup Clock");
-	  $("#periodtime").html()
+	  if (v == "true") {
+		  $.each([ '#loadingdiv', '#jamdiv', '#timeoutdiv'], function(i, divname) {
+			  $(divname).fadeOut('fast');
+		  });
+		  $("#lineupdiv").fadeIn('fast');
+	  }
   });
   
   // Jam Clock
   $sb("ScoreBoard.Clock(Jam).Running").$sbBindAndRun("content", function(e, v) {
-	  $("#displaytext").html("Jam Clock");
+	  if (v == "true") {
+		  $.each([ '#loadingdiv', '#lineupdiv', '#timeoutdiv'], function(i, divname) {
+			  $(divname).fadeOut('fast');
+		  });
+		  $("#jamdiv").fadeIn('fast');
+	  }
   });
   
   // Timeout Clock
   $sb("ScoreBoard.Clock(Timeout).Running").$sbBindAndRun("content", function(e, v) {
-	  $("#displaytext").html("Timeout Clock");
+	  if (v == "true") {
+		  $.each([ '#loadingdiv', '#jamdiv', '#lineupdiv'], function(i, divname) {
+			  $(divname).fadeOut('fast');
+		  });
+		  $("#timeoutdiv").fadeIn('fast');
+	  }
   });
 
   

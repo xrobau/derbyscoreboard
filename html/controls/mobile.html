@@ -105,8 +105,13 @@
         	<tr><td><div class="ui-block-a" id="period">Period<br/><span id="periodno"></span></div></td>
         	<td><div class="ui-block-b" id="periodtime"><a>0:00</a></div></td>
         </table>
-        <h2 id="displaytext">Jam Time/Next Jam</h2>
-        <h1>1:59</h1>
+        <div id="loadingdiv"><h2>Contacting Server...</h2><h1>0:00</h1></div>
+        <div id="jamdiv" style="display: none"><h2>Jam Time</h2><h1>1:59</h1></div>
+        <div id="lineupdiv" style="display: none"><h2>Lineup Time</h2><h1>1:59</h1></div>
+        <div id="timeoutdiv"style="display: none"><h2>TIMEOUT Time</h2><h1>1:59</h1></div>
+        <!--  As we're using position: absolute, the easiest way to fix this is just to put
+        some blank space in the same place the data will go. -->
+        <div id="spacer"><h2>&nbsp;</h2><h1>&nbsp</h1></div>
         <div class="ui-grid-a">
         	<div class="ui-block-a">
 				<button class="StartJam" data-role="button" data-icon="check" data-iconpos="right">Start Jam</button>
